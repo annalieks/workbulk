@@ -1,6 +1,5 @@
 package com.univ.workbulk.user;
 
-import com.univ.workbulk.board.Board;
 import com.univ.workbulk.workgroup.Workgroup;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,9 +30,6 @@ public class User {
 
     @Column
     private String lastName;
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Board> boards;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Workgroup> workgroups;
