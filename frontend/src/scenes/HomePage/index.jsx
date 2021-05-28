@@ -1,95 +1,89 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './styles.module.sass';
 import ListView from '../../components/ListView';
 import Card from '../../components/Card';
-import {history} from "../../helpers/history.helper";
+import {connect} from "react-redux";
+import {createBoardRoutine, createWorkgroupRoutine, fetchBoardsRoutine, fetchWorkgroupsRoutine} from "./routines";
+import Popup from "../../components/Popup";
 
-// eslint-disable-next-line no-unused-vars
-const workgroups = [
-    {
-        id: '1',
-        name: 'Workgroup 1 Some name is here. It is just long. Very very very very very long',
-    }, {
-        id: '2',
-        name: 'Workgroup 2',
-    }, {
-        id: '2',
-        name: 'Workgroup 3',
-    }, {
-        id: '2',
-        name: 'Workgroup 4',
-    }, {
-        id: '2',
-        name: 'Workgroup 5',
-    }, {
-        id: '2',
-        name: 'Workgroup 5',
-    }, {
-        id: '2',
-        name: 'Workgroup 5',
-    }
-];
-
-// eslint-disable-next-line no-unused-vars
-const boards = [
-    {
-        id: '1',
-        name: 'Board 1',
-    }, {
-        id: '2',
-        name: 'Board 2',
-    }, {
-        id: '2',
-        name: 'Board 3',
-    }, {
-        id: '2',
-        name: 'Board 4',
-    }, {
-        id: '2',
-        name: 'Board 5',
-    }
-]
-
-const HomePage = () => {
+const HomePage = ({
+                      boardsLoading,
+                      workgroupsLoading,
+                      boards,
+                      workgroups,
+                      fetchBoards,
+                      fetchWorkgroups,
+                      createWorkgroup,
+                      createBoard
+                  }) => {
     const [boardsSelected, setBoardsSelected] = useState(false);
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [showPopup, setShowPopup] = useState(false);
+
+    const onSave = () => {
+        setName('');
+        setDescription('');
+        setShowPopup(false);
+        if (boardsSelected) {
+            createBoard({name, description});
+        } else {
+            createWorkgroup({name, description});
+        }
+    }
+    useEffect(() => {
+        if (boardsSelected) {
+            fetchBoards();
+        } else {
+            fetchWorkgroups();
+        }
+    }, [boardsSelected]);
+
     return (
         <div className={styles.home_container}>
+            <Popup
+                name={name}
+                setName={setName}
+                description={description}
+                setDescription={setDescription}
+                show={showPopup}
+                setShow={setShowPopup}
+                onClick={() => onSave()}
+            />
             <div className={styles.controls}>
                 <div>
-                <button
-                    type={'button'}
-                    className={`${styles.button} 
+                    <button
+                        type={'button'}
+                        className={`${styles.button} 
                     ${styles.blue_button}
                     ${boardsSelected ? null : styles.selected}`}
-                    onClick={() => setBoardsSelected(false)}
-                >
-                    View workgroups
-                </button>
-                <button
-                    type={'button'}
-                    className={`${styles.button} 
+                        onClick={() => setBoardsSelected(false)}
+                    >
+                        View workgroups
+                    </button>
+                    <button
+                        type={'button'}
+                        className={`${styles.button} 
                     ${styles.blue_button}
                     ${boardsSelected ? styles.selected : null}`}
-                    onClick={() => setBoardsSelected(true)}
-                >
-                    View boards
-                </button>
+                        onClick={() => setBoardsSelected(true)}
+                    >
+                        View boards
+                    </button>
                 </div>
                 <button
                     type={'button'}
                     className={`${styles.button}
                     ${styles.red_button}`}
-                    onClick={() => history.push(`/create/${boardsSelected ? 'board' : 'wg'}`)}
+                    onClick={() => setShowPopup(true)}
                 >
                     Create {boardsSelected ? 'board' : 'workgroup'}
                 </button>
             </div>
-            <ListView>
+            <ListView loading={boardsSelected ? boardsLoading : workgroupsLoading}>
                 {boardsSelected
-                    // eslint-disable-next-line no-unused-vars
                     ? boards.map((b, i) =>
                         <Card key={`board-${i}`} name={b.name} id={b.id} type={'board'}/>)
-                    // eslint-disable-next-line no-unused-vars
                     : workgroups.map((w, i) =>
                         <Card key={`workgroup-${i}`} name={w.name} id={w.id} type={'wg'}/>)
                 }
@@ -98,4 +92,18 @@ const HomePage = () => {
     );
 }
 
-export default HomePage;
+const mapStateToProps = (state) => ({
+    boardsLoading: state.home.boardsLoading,
+    workgroupsLoading: state.home.workgroupsLoading,
+    boards: state.home.boards,
+    workgroups: state.home.workgroups,
+});
+
+const mapDispatchToProps = {
+    fetchWorkgroups: fetchWorkgroupsRoutine,
+    fetchBoards: fetchBoardsRoutine,
+    createWorkgroup: createWorkgroupRoutine,
+    createBoard: createBoardRoutine
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

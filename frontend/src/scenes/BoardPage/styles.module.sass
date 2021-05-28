@@ -1,0 +1,20 @@
+@import 'src/styles/variables'
+
+.board_container
+  padding: 2rem $indent 3rem $indent
+  overflow: auto
+  height: calc(100vh - #{$header-height} - 0.2rem)
+  border-right: $indent solid transparent
+
+.header
+  .name
+    color: $dark-blue
+    font-weight: 600
+    font-size: 2.2em
+    margin-bottom: 0.2rem
+  margin-bottom: 2rem
+
+.columns_container
+  display: flex
+  flex-direction: row
+

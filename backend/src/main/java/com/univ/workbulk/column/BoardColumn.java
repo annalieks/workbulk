@@ -3,6 +3,7 @@ package com.univ.workbulk.column;
 import com.univ.workbulk.card.Card;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,7 +17,7 @@ public class BoardColumn {
 
     @Id
     @GeneratedValue
-    @javax.persistence.Column
+    @Column
     private UUID id;
 
     @Column

@@ -1,11 +1,12 @@
 import React from 'react';
 import styles from './styles.module.sass';
 
-const TaskCard = ({id, name}) => {
+// eslint-disable-next-line no-unused-vars
+const TaskCard = ({id, text}) => {
     // current card as state
     return (
         <div className={styles.card_container}>
-            <p>{name}</p>
+            <p>{text}</p>
         </div>
     );
 }

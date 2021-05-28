@@ -1,7 +1,6 @@
 package com.univ.workbulk.workgroup;
 
 import com.univ.workbulk.board.Board;
-import com.univ.workbulk.user.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,6 +23,9 @@ public class Workgroup {
     private UUID id;
 
     @Column
+    private String description;
+
+    @Column
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
@@ -35,9 +37,6 @@ public class Workgroup {
 
     @Column
     private String name;
-
-    @Column
-    private String description;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Board> boards;

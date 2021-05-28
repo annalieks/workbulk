@@ -1,39 +1,45 @@
-import React from 'react';
-import {useLocation} from 'react-router-dom';
+import React, {useEffect} from 'react';
+import {useParams} from 'react-router-dom';
 import styles from './styles.module.sass';
-import Card from "../../components/Card";
-import ListView from "../../components/ListView";
+import Column from "../../components/Column";
+import {addCardRoutine, fetchBoardRoutine} from "./routines";
+import {connect} from 'react-redux';
+import ScreenLoader from "../../components/ScreenLoader";
 
-const boards = [
-    {
-        id: '1',
-        name: 'Board 1',
-    }, {
-        id: '2',
-        name: 'Board 2',
-    }, {
-        id: '2',
-        name: 'Board 3',
-    }, {
-        id: '2',
-        name: 'Board 4',
-    }, {
-        id: '2',
-        name: 'Board 5',
-    }
-]
-
-const WorkgroupPage = () => {
-    // eslint-disable-next-line no-unused-vars
-    const location = useLocation();
-    return (
-        <div className={styles.workgroup_container}>
-            <ListView>
-                {boards.map((b, i) =>
-                    <Card key={`board-${i}`} name={b.name} id={b.id} type={'board'}/>)}
-            </ListView>
+const BoardPage = ({board, fetchBoard, addCard}) => {
+    const params = useParams();
+    useEffect(() => {
+        if (params.id) {
+            fetchBoard(params.id);
+        }
+    }, [params]);
+    return board.loading ? <ScreenLoader/> : (
+        <div className={styles.board_container}>
+            <div className={styles.header}>
+                <p className={styles.name}>{board.name}</p>
+                <p>{board.description}</p>
+            </div>
+            <div className={styles.columns_container}>
+                {board.columns.map((c, i) =>
+                    <Column
+                        key={`col-${i}`}
+                        id={c.id}
+                        name={c.name}
+                        cards={c.cards}
+                        addCard={addCard}
+                    />)}
+            </div>
         </div>
     );
 }
 
-export default WorkgroupPage;
+const mapStateToProps = (state) => ({
+    board: state.board,
+});
+
+const mapDispatchToProps = {
+    fetchBoard: fetchBoardRoutine,
+    addCard: addCardRoutine
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BoardPage);
