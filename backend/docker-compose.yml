@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0.25
+    restart: unless-stopped
+    container_name: workbulk_db
+    environment:
+      MYSQL_DATABASE: workbulk
+      MYSQL_USER: build
+      MYSQL_PASSWORD: build
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3306:3306
+    volumes:
+    - db-data:/var/lib/mysql
+    - db-files:/var/lib/mysql-files
+    - ./mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+    networks:
+      - backend
+
+volumes:
+  db-data:
+      driver: local
+  db-files:
+
+
+networks:
+  backend:
+    driver: bridge
+
