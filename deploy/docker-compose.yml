@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:9.6.23
+    restart: unless-stopped
+    container_name: workbulk_db
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - workbulk
+
+  backend:
+    build: ../backend
+    restart: unless-stopped
+    ports:
+      - "7070:7070"
+    depends_on:
+      - db
+    networks:
+      - workbulk
+
+  frontend:
+    build: ../frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+#
+#  caddy:
+#    image: caddy:2.4.5-alpine
+#    restart: unless-stopped
+#    command: caddy reverse-proxy --from https://workbulk.eastus.azurecontainer.io:443 --to http://localhost:3000
+#    ports:
+#      - 80:80
+#      - 443:443
+#    volumes:
+#      - caddy:/data
+#    depends_on:
+#      - backend
+#      - frontend
+
+volumes:
+  db-data:
+      driver: local
+  db-files:
+
+
+networks:
+  workbulk:
+    driver: bridge
+

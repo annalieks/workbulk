@@ -2,20 +2,17 @@ version: '3.8'
 
 services:
   db:
-    image: mysql:8.0.25
+    image: postgres:9.6.23
     restart: unless-stopped
     container_name: workbulk_db
     environment:
-      MYSQL_DATABASE: workbulk
-      MYSQL_USER: build
-      MYSQL_PASSWORD: build
-      MYSQL_ROOT_PASSWORD: root
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
     ports:
-      - 3306:3306
+      - "5432:5432"
     volumes:
-    - db-data:/var/lib/mysql
-    - db-files:/var/lib/mysql-files
-    - ./mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - backend
 
