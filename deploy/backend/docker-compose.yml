@@ -23,52 +23,32 @@ services:
       - db
     networks:
       - workbulk
+    environment:
+      - DB_HOSTNAME=db
     deploy:
       resources:
         reservations:
           cpus: '0.5'
-          memory: 1.5G
+          memory: 2G
 
-  frontend:
-    image: annalieks/workbulk_frontend
+  caddy:
+    image: caddy:2.4.5-alpine
     restart: unless-stopped
+    command: caddy reverse-proxy --from https://workbulk-back.eastus.azurecontainer.io:443 --to http://backend:7070
     ports:
-      - "3000:3000"
+      - "80:80"
+      - "443:443"
+    domainname: workbulk-back
     depends_on:
       - backend
     networks:
       - workbulk
-    domainname: workbulk
-    environment:
-      BACKEND_URL: http://backend:7070
     deploy:
       resources:
         reservations:
           cpus: '0.5'
-          memory: 1.5G
-
-  # caddy:
-  #   image: caddy:2.4.5-alpine
-  #   restart: unless-stopped
-  #   command: caddy reverse-proxy --from http://workbulk.eastus.azurecontainer.io:80 --to http://frontend:3000
-  #   ports:
-  #     - "80:80"
-  #     # - "443:443"
-  #   depends_on:
-  #     - frontend
-  #   domainname: workbulk
-  #   networks:
-  #     - workbulk
-  #   deploy:
-  #     resources:
-  #       reservations:
-  #         cpus: '0.5'
-  #         memory: 1.5G
+          memory: 2G
 
 networks:
   workbulk:
     driver: bridge
-
-
-
-

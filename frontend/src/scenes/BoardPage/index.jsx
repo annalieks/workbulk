@@ -1,23 +1,56 @@
-import React, {useEffect} from 'react';
-import {useParams} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styles from './styles.module.sass';
 import Column from "../../components/Column";
-import {addCardRoutine, fetchBoardRoutine} from "./routines";
-import {connect} from 'react-redux';
+import { addCardRoutine, createColumnRoutine, fetchBoardRoutine } from "./routines";
+import { connect } from 'react-redux';
 import ScreenLoader from "../../components/ScreenLoader";
+import Popup from '../../components/Popup';
 
-const BoardPage = ({board, fetchBoard, addCard}) => {
+const BoardPage = ({ board, fetchBoard, addCard, createColumn }) => {
     const params = useParams();
+    const [name, setName] = useState('');
+    const [showPopup, setShowPopup] = useState(false);
     useEffect(() => {
         if (params.id) {
             fetchBoard(params.id);
         }
     }, [params]);
-    return board.loading ? <ScreenLoader/> : (
+
+    const onSave = () => {
+        createColumn({
+            id: params.id,
+            name: name
+        });
+        setShowPopup(false);
+        setName('');
+    }
+
+    return board.loading ? <ScreenLoader /> : (
         <div className={styles.board_container}>
+             <Popup
+                name={name}
+                setName={setName}
+                show={showPopup}
+                setShow={setShowPopup}
+                onClick={() => onSave()}
+            />
             <div className={styles.header}>
-                <p className={styles.name}>{board.name}</p>
-                <p>{board.description}</p>
+                <div>
+                    <div className={styles.title}>
+                        {board.name}
+                    </div>
+                    <div className={styles.description}>
+                        {board.description}
+                    </div>
+                </div>
+                <button
+                    type={'button'}
+                    className={styles.button}
+                    onClick={() => setShowPopup(true)}
+                >
+                    Create Column
+                </button>
             </div>
             <div className={styles.columns_container}>
                 {board.columns.map((c, i) =>
@@ -39,7 +72,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
     fetchBoard: fetchBoardRoutine,
-    addCard: addCardRoutine
+    addCard: addCardRoutine,
+    createColumn: createColumnRoutine
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BoardPage);

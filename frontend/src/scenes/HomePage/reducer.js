@@ -1,4 +1,4 @@
-import {fetchBoardsRoutine, fetchWorkgroupsRoutine} from "./routines";
+import { fetchBoardsRoutine, fetchWorkgroupsRoutine } from "./routines";
 
 const initialState = {
     workgroupsLoading: true,
@@ -32,7 +32,7 @@ const homeData = (state = initialState, action) => {
                 ...state,
                 workgroups: [],
                 workgroupsLoading: false,
-            }
+            };
         default: {
             return state;
         }

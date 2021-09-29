@@ -2,13 +2,15 @@ package com.univ.workbulk.workgroup.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class CreateWorkgroupDto {
 
-    private final String name;
+    private String name;
 
-    private final String description;
+    private String description;
 
 }

@@ -8,7 +8,7 @@ public class SecurityConstants {
 
     public static final String HEADER_STRING = "Authorization";
 
-    protected static final String[] ROUTES_WHITE_LIST = {"/auth/signin", "/auth/signup"};
+    protected static final String[] ROUTES_WHITE_LIST = {"/auth/signin", "/auth/signup", "/images/**"};
 
     private SecurityConstants() {
     }

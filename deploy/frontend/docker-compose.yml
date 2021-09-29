@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: annalieks/workbulk_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    networks:
+      - workbulk_front
+    deploy:
+      resources:
+        reservations:
+          cpus: '0.5'
+          memory: 1.5G
+
+  caddy:
+    image: caddy:2.4.5-alpine
+    restart: unless-stopped
+    command: caddy reverse-proxy --from https://workbulk.eastus.azurecontainer.io:443 --to http://frontend:3000
+    ports:
+      - "80:80"
+      - "443:443"
+    domainname: workbulk
+    depends_on:
+      - frontend
+    networks:
+      - workbulk_front
+    deploy:
+      resources:
+        reservations:
+          cpus: '0.5'
+          memory: 1.5G
+
+networks:
+  workbulk_front:
+    driver: bridge
+
+
+
+

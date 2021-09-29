@@ -59,7 +59,7 @@ public class TokenService {
                 .compact();
     }
 
-    static public UUID getUserId(){
+    public static UUID getUserId(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         var currentUserId = (String)auth.getPrincipal();
         return  UUID.fromString(currentUserId);

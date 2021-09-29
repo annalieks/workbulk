@@ -1,4 +1,4 @@
-import {fetchWorkgroupRoutine} from './routines';
+import {createBoardRoutine, fetchWorkgroupRoutine} from './routines';
 
 
 const initialState = {
@@ -22,6 +22,12 @@ const workgroupData = (state = initialState, action) => {
                 ...state,
                 ...action.payload,
                 loading: false
+            }
+        }
+        case createBoardRoutine.SUCCESS: {
+            return {
+                ...state,
+                boards: [...state.boards, action.payload]
             }
         }
         default: {

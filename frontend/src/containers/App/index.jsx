@@ -9,6 +9,7 @@ import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 import WorkgroupPage from '../../scenes/WorkgroupPage';
 import BoardPage from '../../scenes/BoardPage';
 import AuthPage from '../../scenes/AuthPage';
+import UserPage from '../../scenes/UserPage';
 import {TOKEN_NAME} from "../../commons/constants";
 
 const App = ({loading}) => (
@@ -21,6 +22,7 @@ const App = ({loading}) => (
             <Route exact path="/board/:id" component={BoardPage}/>
             <Route exact path="/signup" component={() => <AuthPage isSignUp={true}/>}/>
             <Route exact path="/signin" component={() => <AuthPage isSignUp={false}/>}/>
+            <Route exact path="/user/me" component={UserPage}/>
         </Switch>
     </Router>
 );

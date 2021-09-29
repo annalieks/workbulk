@@ -33,8 +33,8 @@ public class ColumnService {
         var column = ColumnMapper.MAPPER.createColumnDtoToColumn(columnDto);
         board.getColumns().add(column);
 
-        boardService.save(board);
         var savedColumn = columnRepository.save(column);
+        boardService.save(board);
         return ColumnMapper.MAPPER.columnToColumnDto(savedColumn);
     }
 
