@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  db:
+    image: annalieks/workbulk_db
+    container_name: db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - "5432:5432"
+    networks:
+      - workbulk
+
+  backend:
+    image: annalieks/workbulk_backend
+    restart: unless-stopped
+    ports:
+      - "7070:7070"
+    depends_on:
+      - db
+    networks:
+      - workbulk
+    environment:
+      - DB_HOSTNAME=db
+    deploy:
+      resources:
+        reservations:
+          cpus: '0.5'
+          memory: 2G
+
+  caddy:
+    image: caddy:2.4.5-alpine
+    restart: unless-stopped
+    command: caddy reverse-proxy --from https://workbulk-back.eastus.azurecontainer.io:443 --to http://backend:7070
+    ports:
+      - "80:80"
+      - "443:443"
+    domainname: workbulk-back
+    depends_on:
+      - backend
+    networks:
+      - workbulk
+    deploy:
+      resources:
+        reservations:
+          cpus: '0.5'
+          memory: 2G
+
+networks:
+  workbulk:
+    driver: bridge

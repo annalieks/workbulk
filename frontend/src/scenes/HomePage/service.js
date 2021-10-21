@@ -43,3 +43,43 @@ export const createBoard = async (name, description) => {
 
     return result.json();
 }
+
+export const editWorkgroup = async (workgroupId, name, description) => {
+    const result = await callWebApi({
+        endpoint: `/workgroup/${workgroupId}`,
+        type: 'PUT',
+        request: {
+            name,
+            description
+        }
+    })
+
+    return result.json();
+}
+
+export const deleteWorkgroup = async (workgroupId) => {
+    await callWebApi({
+        endpoint: `/workgroup/${workgroupId}`,
+        type: 'DELETE'
+    });
+}
+
+export const editBoard = async (boardId, name, description) => {
+    const result = await callWebApi({
+        endpoint: `/board/${boardId}`,
+        type: 'PUT',
+        request: {
+            name,
+            description
+        }
+    })
+
+    return result.json();
+}
+
+export const deleteBoard = async (boardId) => {
+    await callWebApi({
+        endpoint: `/board/${boardId}`,
+        type: 'DELETE'
+    });
+}

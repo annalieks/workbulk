@@ -20,3 +20,15 @@ export const addCard = async (columnId, text) => {
 
     return result.json();
 };
+
+export const createColumn = async (boardId, name) => {
+    const result = await callWebApi({
+        endpoint: `/column/create?board-id=${boardId}`,
+        type: 'POST',
+        request: {
+            name
+        }
+    });
+
+    return result.json();
+}

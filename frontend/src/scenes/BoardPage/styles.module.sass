@@ -6,15 +6,33 @@
   height: calc(100vh - #{$header-height} - 0.2rem)
   border-right: $indent solid transparent
 
+.title
+  font-size: 1.5em
+  color: $blue
+  margin-bottom: 0.5rem
+
+.button
+  font-style: inherit
+  font-size: inherit
+  font-family: inherit
+  padding: 0.5rem 0.8rem 0.5rem 0.8rem
+  background: transparent
+  cursor: pointer
+  border-radius: 1.5rem
+  margin-right: 0.8rem
+  transition: 0.2s
+  color: $red
+  border: 0.1rem solid $red
+
 .header
-  .name
-    color: $dark-blue
-    font-weight: 600
-    font-size: 2.2em
-    margin-bottom: 0.2rem
-  margin-bottom: 2rem
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  align-items: center
 
 .columns_container
   display: flex
   flex-direction: row
 
+.description
+  margin-bottom: 1rem

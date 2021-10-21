@@ -1,9 +1,11 @@
 package com.univ.workbulk.board;
 
 import com.univ.workbulk.column.BoardColumn;
+import com.univ.workbulk.workgroup.Workgroup;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.ManyToAny;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -38,6 +40,10 @@ public class Board {
 
     @Column
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name="workgroup_id")
+    Workgroup workgroup;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<BoardColumn> columns = new ArrayList<>();

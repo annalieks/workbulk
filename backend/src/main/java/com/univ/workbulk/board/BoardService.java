@@ -5,6 +5,7 @@ import com.univ.workbulk.board.dto.CreateBoardDto;
 import com.univ.workbulk.board.dto.FullBoardDto;
 import com.univ.workbulk.column.ColumnMapper;
 import com.univ.workbulk.exception.EntityNotFoundException;
+import com.univ.workbulk.user.UserRepository;
 import com.univ.workbulk.workgroup.WorkgroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,11 +22,15 @@ public class BoardService {
 
     private final WorkgroupService workgroupService;
 
+    private final UserRepository userRepository;
+
     @Autowired
     public BoardService(BoardRepository boardRepository,
-                        WorkgroupService workgroupService) {
+                        WorkgroupService workgroupService,
+                        UserRepository userRepository) {
         this.boardRepository = boardRepository;
         this.workgroupService = workgroupService;
+        this.userRepository = userRepository;
     }
 
     public BoardDto createBoard(UUID workgroupId, CreateBoardDto boardDto) {
@@ -36,6 +41,7 @@ public class BoardService {
 
         var board = BoardMapper.MAPPER.createBoardDtoToBoard(boardDto);
         workgroup.getBoards().add(board);
+        board.setWorkgroup(workgroup);
         workgroupService.save(workgroup);
         var savedBoard = boardRepository.save(board);
         return BoardMapper.MAPPER.boardToBoardDto(savedBoard);
@@ -73,6 +79,27 @@ public class BoardService {
 
     public Board save(Board board) {
         return boardRepository.save(board);
+    }
+
+    public void delete(UUID id) {
+        var board = findById(id).orElseThrow(() -> new EntityNotFoundException(
+                String.format("No board with id %s exist", id)
+        ));
+        var workgroup = board.getWorkgroup();
+        if (workgroup != null) {
+            workgroupService.deleteBoard(workgroup.getId(), id);
+        } else {
+            boardRepository.delete(board);
+        }
+    }
+
+    public BoardDto edit(UUID id, String name, String description) {
+        var board = findById(id).orElseThrow(() -> new EntityNotFoundException(
+                String.format("No board with id %s exist", id)
+        ));
+        board.setName(name);
+        board.setDescription(description);
+        return BoardMapper.MAPPER.boardToBoardDto(boardRepository.save(board));
     }
 
 }

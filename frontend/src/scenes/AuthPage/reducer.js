@@ -4,7 +4,8 @@ const initialState = {
     loading: false,
     fistName: '',
     lastName: '',
-    email: ''
+    email: '',
+    avatar: '',
 }
 
 const authData = (state = initialState, action) => {
@@ -20,6 +21,13 @@ const authData = (state = initialState, action) => {
             return {
                 loading: false,
                 ...action.payload,
+            }
+            
+        case signUpRoutine.FAILURE:
+        case signInRoutine.FAILURE:
+            return {
+                ...state,
+                loading: false,
             }
         default: {
             return state;
