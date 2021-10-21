@@ -18,6 +18,7 @@ public interface BoardMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "columns", ignore = true)
+    @Mapping(target = "workgroup", ignore = true)
     Board createBoardDtoToBoard(CreateBoardDto createBoardDto);
 
     @Mapping(target = "columns", ignore = true)

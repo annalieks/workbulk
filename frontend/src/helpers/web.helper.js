@@ -1,7 +1,8 @@
 import * as queryString from 'query-string';
 import {TOKEN_NAME} from '../commons/constants';
 
-const serverAddress = 'http://localhost:7070';
+export const serverAddress = 'https://workbulk-back.eastus.azurecontainer.io:443';
+// export const serverAddress = 'http://localhost:7070';
 
 function getFetchUrl(args) {
     return serverAddress + args.endpoint + (args.query ? `?${queryString.stringify(args.query)}` : '');
@@ -22,6 +23,7 @@ function getFetchArgs(args) {
         if (args.type === 'GET') {
             throw new Error('GET request does not support attachments.');
         }
+        // headers['Content-Type'] = 'multipart/form-data';
         const formData = new FormData();
         formData.append('image', args.attachment);
         body = formData;

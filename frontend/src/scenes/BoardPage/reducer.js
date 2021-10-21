@@ -1,4 +1,4 @@
-import {fetchBoardRoutine} from "./routines";
+import {createColumnRoutine, fetchBoardRoutine} from "./routines";
 
 const initialState = {
     loading: true,
@@ -22,6 +22,12 @@ const boardData = (state = initialState, action) => {
                 loading: false
             }
         }
+        case createColumnRoutine.SUCCESS: {
+            return {
+                ...state,
+                columns: [...state.columns, action.payload]
+            }
+        } 
         default: {
             return state;
         }

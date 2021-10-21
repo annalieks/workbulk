@@ -1,10 +1,11 @@
 import React from 'react';
 import styles from './styles.module.sass';
 import logo from '../../assets/logo.png';
-import {Link, useLocation} from 'react-router-dom';
-import {TOKEN_NAME} from '../../commons/constants';
-import {history} from '../../helpers/history.helper';
+import { Link, useLocation } from 'react-router-dom';
+import { TOKEN_NAME } from '../../commons/constants';
+import { history } from '../../helpers/history.helper';
 import * as tokenHelper from '../../helpers/token.helper';
+import { Icon } from 'semantic-ui-react';
 
 const excludeControls = ['/signin', '/signup']
 
@@ -22,7 +23,7 @@ const Header = () => {
     return (
         <div className={styles.header_container}>
             <Link to="/">
-                <img className={styles.logo} src={logo} alt="Workbulk logo"/>
+                <img className={styles.logo} src={logo} alt="Workbulk logo" />
             </Link>
             <div className={styles.controls_container}>
                 {renderControls() && <Link to="/signin">
@@ -38,6 +39,10 @@ const Header = () => {
                 >
                     Sign out
                 </button>}
+                {authenticated &&
+                    <Link to="/user/me">
+                        <Icon className={styles.icon} name="user outline" />
+                    </Link>}
             </div>
         </div>
     );

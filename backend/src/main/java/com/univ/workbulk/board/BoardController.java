@@ -41,4 +41,14 @@ public class BoardController {
         return boardService.getInfo(id);
     }
 
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable UUID id) {
+        boardService.delete(id);
+    }
+
+    @PutMapping("/{id}")
+    public BoardDto edit(@PathVariable UUID id, @RequestBody CreateBoardDto boardDto) {
+        return boardService.edit(id, boardDto.getName(), boardDto.getDescription());
+    }
+
 }

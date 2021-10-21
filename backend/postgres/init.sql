@@ -1,0 +1,3 @@
+CREATE USER admin;
+CREATE DATABASE workbulk;
+GRANT ALL PRIVILEGES ON DATABASE workbulk TO admin;

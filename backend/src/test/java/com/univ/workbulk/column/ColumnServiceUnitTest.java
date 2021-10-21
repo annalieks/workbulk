@@ -3,10 +3,9 @@ package com.univ.workbulk.column;
 import com.univ.workbulk.board.Board;
 import com.univ.workbulk.board.BoardService;
 import com.univ.workbulk.column.dto.CreateColumnDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
@@ -17,16 +16,19 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ColumnServiceUnitTest {
+class ColumnServiceUnitTest {
+    private ColumnService columnService;
 
-    @Mock
     private ColumnRepository columnRepository;
-
-    @Mock
     private BoardService boardService;
 
-    @InjectMocks
-    private ColumnService columnService;
+    @BeforeEach
+    public void setUp() {
+        columnRepository = mock(ColumnRepository.class);
+        boardService = mock(BoardService.class);
+
+        columnService = new ColumnService(columnRepository, boardService);
+    }
 
     @Test
     void whenCreateColumn_thenEntityIsCreated() {
