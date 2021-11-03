@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Main entities suite" parallel="tests">
+    <test name="Elements test">
+        <classes>
+            <class name="com.univ.workbulk.board.BoardServiceUnitTest"/>
+            <class name="com.univ.workbulk.column.ColumnServiceUnitTest"/>
+            <class name="com.univ.workbulk.card.CardServiceUnitTest"/>
+            <class name="com.univ.workbulk.workgroup.WorkgroupServiceUnitTest"/>
+        </classes>
+    </test>
+</suite>

@@ -3,11 +3,12 @@ package com.univ.workbulk.workgroup;
 import com.univ.workbulk.board.BoardMapper;
 import com.univ.workbulk.board.BoardRepository;
 import com.univ.workbulk.board.dto.CreateBoardDto;
+import com.univ.workbulk.exception.EntityNotFoundException;
 import com.univ.workbulk.workgroup.dto.CreateWorkgroupDto;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
@@ -19,23 +20,26 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WorkgroupServiceUnitTest {
+    @InjectMocks
     private WorkgroupService workgroupService;
 
+    @Mock
     private WorkgroupRepository workgroupRepository;
+
+    @Mock
     private BoardRepository boardRepository;
 
-    @BeforeEach
+    private CreateWorkgroupDto workgroupDto;
+
+    @BeforeAll
     public void setUp() {
-        workgroupRepository = mock(WorkgroupRepository.class);
-        boardRepository = mock(BoardRepository.class);
-        workgroupService = new WorkgroupService(workgroupRepository, boardRepository);
+        workgroupDto = new CreateWorkgroupDto("name", "description");
     }
 
     @Test
     void whenCreateWorkgroup_thenEntityIsCreated() {
-        var workgroupDto = new CreateWorkgroupDto("name", "description");
-        var workgroup = WorkgroupMapper.MAPPER.createWorkgroupDtoToWorkgroup(workgroupDto);
         var savedWorkgroup = WorkgroupMapper.MAPPER.createWorkgroupDtoToWorkgroup(workgroupDto);
         savedWorkgroup.setId(UUID.randomUUID());
         when(workgroupRepository.save(any())).thenReturn(savedWorkgroup);
@@ -51,9 +55,7 @@ class WorkgroupServiceUnitTest {
 
     @Test
     void whenEditBoard_thenEdited() {
-        var workgroup = WorkgroupMapper.MAPPER.createWorkgroupDtoToWorkgroup(
-                new CreateWorkgroupDto("name", "description")
-        );
+        var workgroup = WorkgroupMapper.MAPPER.createWorkgroupDtoToWorkgroup(workgroupDto);
         workgroup.setId(UUID.randomUUID());
         var board = BoardMapper.MAPPER.createBoardDtoToBoard(
                 new CreateBoardDto("name", "description")
@@ -69,6 +71,12 @@ class WorkgroupServiceUnitTest {
         Assertions.assertEquals("new name", boardDto.getName());
         Assertions.assertEquals("new desc", boardDto.getDescription());
         Assertions.assertEquals(boardDto.getCreatedAt(), board.getCreatedAt());
+    }
+
+    @Test
+    void whenGetAbsentWorkgroup_thenExceptionThrown() {
+        Assertions.assertThrows(EntityNotFoundException.class,
+                () -> workgroupService.get(UUID.randomUUID()));
     }
 
 }

@@ -1,7 +1,6 @@
 package com.univ.workbulk.auth;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.User;
 
@@ -16,11 +15,6 @@ public class AuthUser extends User {
 
     public AuthUser(UUID id, String email, String password) {
         super(email, password, Collections.emptyList());
-        this.id = id;
-    }
-
-    public AuthUser(UUID id, String username) {
-        super(username, null, Collections.emptyList());
         this.id = id;
     }
 

@@ -9,6 +9,7 @@ import com.univ.workbulk.user.UserRepository;
 import com.univ.workbulk.workgroup.dto.CreateWorkgroupDto;
 import com.univ.workbulk.workgroup.dto.FullWorkgroupDto;
 import com.univ.workbulk.workgroup.dto.WorkgroupDto;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +19,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@NoArgsConstructor
 public class WorkgroupService {
 
-    private final WorkgroupRepository workgroupRepository;
+    private WorkgroupRepository workgroupRepository;
 
-    private final BoardRepository boardRepository;
+    private BoardRepository boardRepository;
 
     @Autowired
     public WorkgroupService(WorkgroupRepository workgroupRepository,

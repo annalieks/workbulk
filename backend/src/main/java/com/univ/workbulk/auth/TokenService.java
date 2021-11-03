@@ -20,8 +20,11 @@ import java.util.function.Function;
 @Service
 public class TokenService {
 
-    @Value(value = "${auth0.secret-key}")
-    private String SECRET_KEY;
+    private final String secretKey;
+
+    public TokenService(@Value(value = "${auth0.secret-key}") String secretKey) {
+        this.secretKey = secretKey;
+    }
 
     public String extractUserid(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -36,7 +39,7 @@ public class TokenService {
         return claimsResolver.apply(claims);
     }
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     }
 
     public Boolean isTokenExpired(String token) {
@@ -49,7 +52,7 @@ public class TokenService {
     }
 
     private String createToken(Map<String, Object> claims, UUID subject) {
-        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
+        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject.toString())

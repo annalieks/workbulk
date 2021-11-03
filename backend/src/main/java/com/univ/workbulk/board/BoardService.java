@@ -22,15 +22,11 @@ public class BoardService {
 
     private final WorkgroupService workgroupService;
 
-    private final UserRepository userRepository;
-
     @Autowired
     public BoardService(BoardRepository boardRepository,
-                        WorkgroupService workgroupService,
-                        UserRepository userRepository) {
+                        WorkgroupService workgroupService) {
         this.boardRepository = boardRepository;
         this.workgroupService = workgroupService;
-        this.userRepository = userRepository;
     }
 
     public BoardDto createBoard(UUID workgroupId, CreateBoardDto boardDto) {

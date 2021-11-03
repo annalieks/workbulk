@@ -3,10 +3,8 @@ package com.univ.workbulk.column;
 import com.univ.workbulk.board.Board;
 import com.univ.workbulk.board.BoardService;
 import com.univ.workbulk.column.dto.CreateColumnDto;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -15,14 +13,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-class ColumnServiceUnitTest {
+public class ColumnServiceUnitTest {
     private ColumnService columnService;
 
     private ColumnRepository columnRepository;
     private BoardService boardService;
 
-    @BeforeEach
+    @BeforeTest
     public void setUp() {
         columnRepository = mock(ColumnRepository.class);
         boardService = mock(BoardService.class);
@@ -30,7 +27,7 @@ class ColumnServiceUnitTest {
         columnService = new ColumnService(columnRepository, boardService);
     }
 
-    @Test
+    @Test(groups = "entity")
     void whenCreateColumn_thenEntityIsCreated() {
         var boardId = UUID.randomUUID();
         var board = new Board();
